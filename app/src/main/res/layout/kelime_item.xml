@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
+    android:background="@drawable/kelime_back"
+    android:layout_margin="2dp"
+    >
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="Kelime"
+        android:textStyle="bold"
+        android:textSize="23dp"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/orta"
+        android:id="@+id/kelime"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="45dp"
+        android:text="KKKKKKKKKKKKKK"
+        android:textSize="23dp"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:layout_below="@id/kelime"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/orta"
+        android:id="@+id/kelimeText"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/kelime_back"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/orta"/>
+
+    <TextView
+        android:id="@+id/anlami"
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:layout_toLeftOf="@id/deleteButton"
+        android:layout_toRightOf="@id/orta"
+        android:padding="5dp"
+        android:text="Anlamı:"
+        android:textColor="#000"
+        android:textSize="23dp"
+        android:textStyle="bold" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="45dp"
+        android:text="0123456789"
+        android:textSize="23dp"
+        android:padding="5dp"
+        android:textColor="#000"
+        android:layout_below="@id/anlami"
+        android:layout_toRightOf="@id/orta"
+        android:layout_alignParentRight="true"
+        android:id="@+id/anlamiText"/>
+    <ImageButton
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/exit_icon"
+        android:background="#00FFFFFF"
+        android:padding="4dp"
+        android:layout_alignParentRight="true"
+        />
+
+
+</RelativeLayout>
