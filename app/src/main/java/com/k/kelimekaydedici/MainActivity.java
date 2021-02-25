@@ -1,29 +1,28 @@
 package com.k.kelimekaydedici;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import android.app.Dialog;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
+import android.widget.Toolbar;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -31,129 +30,141 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-    private RecyclerView recyclerView;
-    private FloatingActionButton ekleButton;
-    private List<DilModel> dilModelList;
-    private Toolbar toolbar;
-    private ImageView imagePlus;
-    private TextView dilEkle;
+public class MainActivity extends AppCompatActivity implements KelimeListener{
+    public static final int REQUEST_CODE=0;
+    public static final int REQUEST_CODE_DUZENLE=1;
 
-    private AdView mAdView;
+    private RecyclerView recyclerView;
+    private List<KelimeModel> kelimeModels;
+    private FloatingActionButton ekleButton;
+    private KelimeModel kelimeModel;
+    private KelimeListAdapter kelimeListAdapter;
+
+    private int position;
+
+    private DrawerLayout drawerLayout;
+    private ActionBarDrawerToggle drawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        recyclerView=findViewById(R.id.kelimeRec);
+        ekleButton = findViewById(R.id.ekleButon);
+        loadDataKelime();
 
-        recyclerView=findViewById(R.id.dilRec);
-        ekleButton=findViewById(R.id.ekleButon);
-        dilEkle=findViewById(R.id.dilEkle);
-        imagePlus=findViewById(R.id.imageplus);
-        toolbar = findViewById(R.id.toolbar);
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
+        drawerLayout=findViewById(R.id.drawer);
+        drawerToggle= new ActionBarDrawerToggle(this,drawerLayout,R.string.Ac,R.string.Kapa);
+        drawerToggle.setDrawerIndicatorEnabled(true);
 
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Diller");
+        drawerLayout.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
-        loadData();
+        getSorular(kelimeModels,kelimeModel,0);
 
-        final DilAdapter dilAdapter = new DilAdapter(dilModelList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(dilAdapter);
 
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_ACTION_BAR);
-        dialog.setCancelable(true);
-        dialog.setContentView(R.layout.dialog_item);
-
-        final EditText editText = dialog.findViewById(R.id.editText);
-        Button cancel = dialog.findViewById(R.id.cancelButton);
-        Button ok = dialog.findViewById(R.id.okButton);
-
-        if(dilModelList.size()==0){
-            imagePlus.setAlpha(1f);
-            imagePlus.setEnabled(true);
-            dilEkle.setAlpha(1f);
-            dilEkle.setEnabled(true);
-        }else{
-            imagePlus.setAlpha(0f);
-            imagePlus.setEnabled(false);
-            dilEkle.setAlpha(0f);
-            dilEkle.setEnabled(false);
-        }
-        TextView diltext=dialog.findViewById(R.id.dilText);
-        diltext.setText("Dil Ekle");
-        ok.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if(editText.getText().toString().trim().equals("")){
-                    dialog.cancel();
-                } else {
-                    dilModelList.add(new DilModel(editText.getText().toString()));
-                    editText.setText("");
-                    dialog.cancel();
-                }
-                if(!dilModelList.equals(null)){
-                    imagePlus.setAlpha(0f);
-                    imagePlus.setEnabled(false);
-                    dilEkle.setAlpha(0f);
-                    dilEkle.setEnabled(false);
-                }else{
-                    imagePlus.setAlpha(1f);
-                    imagePlus.setEnabled(true);
-                    dilEkle.setAlpha(1f);
-                    dilEkle.setEnabled(true);
-                }
-                saveData();
-
-            }
-        });
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.cancel();
-            }
-        });
         ekleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            dialog.show();
+                Intent intent = new Intent(MainActivity.this,EkleActivity.class);
+                startActivityForResult(intent,REQUEST_CODE);
+            }
+        });
+        NavigationView nav_view = findViewById(R.id.nav_view);
+        nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+                if(id== R.id.favoriler){
+
+                }if(id== R.id.kategoriler){
+
+                }
+                return true;
             }
         });
 
 
     }
-    protected void onPause(){
+    @Override
+    public void onBackPressed() {
+
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+    private void getSorular(List<KelimeModel> kelimeModels, KelimeModel kelimeModel, int position) {
+        if(kelimeModel!=null){
+            if(position==kelimeModels.size()+1){
+                kelimeModels.add(kelimeModel);
+            }else{
+                kelimeModels.get(position).setKelime(kelimeModel.getKelime());
+                kelimeModels.get(position).setCevirisi(kelimeModel.getCevirisi());
+                kelimeListAdapter.notifyItemChanged(position);
+                kelimeListAdapter.notifyDataSetChanged();
+            }
+
+        }
+        kelimeListAdapter = new KelimeListAdapter(kelimeModels,this);
+        RecyclerView.LayoutManager gridlayout = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(gridlayout);
+        recyclerView.setAdapter(kelimeListAdapter);
+    }
+
+    @Override
+    protected void onPause() {
         super.onPause();
-        saveData();
+        saveDataKelime();
     }
-    private void saveData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("sh",MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(dilModelList);
-        editor.putString("task list",json);
-        editor.apply();
-    }
-    private void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences("sh",MODE_PRIVATE);
-        Gson gson = new Gson();
-        String json = sharedPreferences.getString("task list",null);
-        Type type= new TypeToken<ArrayList<DilModel>>(){}.getType();
-        dilModelList=gson.fromJson(json,type);
-        if (dilModelList==null){
-            dilModelList=new ArrayList<>();
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_CODE) {
+                if (data != null){
+                    kelimeModel= new KelimeModel(data.getStringExtra("kelime"),data.getStringExtra("cevirisi"));
+                    getSorular(kelimeModels,kelimeModel,kelimeModels.size()+1);
+                }
+            }if (requestCode == REQUEST_CODE_DUZENLE) {
+                if (data != null){
+                    position = data.getIntExtra("position",0);
+                    kelimeModel= new KelimeModel(data.getStringExtra("degisenkelime"),data.getStringExtra("degisenceviri"));
+                    getSorular(kelimeModels,kelimeModel,position);
+                }
+            }
         }
     }
 
+    private void saveDataKelime() {
+        SharedPreferences sharedPreferences = getSharedPreferences("kelime",MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(kelimeModels);
+        editor.putString("kelime list",json);
+        editor.apply();
+    }
+    private void loadDataKelime() {
+        SharedPreferences sharedPreferences = getSharedPreferences("kelime",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("kelime list",null);
+        Type type= new TypeToken<ArrayList<KelimeModel>>(){}.getType();
+        kelimeModels=gson.fromJson(json,type);
+        if (kelimeModels==null){
+            kelimeModels=new ArrayList<>();
+        }
+    }
+
+    @Override
+    public void onKelimeListener(KelimeModel kelimeModel, int position) {
+        Intent intent = new Intent(MainActivity.this, KelimeActivity.class);
+        intent.putExtra("kelime",kelimeModel.getKelime());
+        intent.putExtra("ceviri",kelimeModel.getCevirisi());
+        intent.putExtra("position",position);
+        startActivityForResult(intent,REQUEST_CODE_DUZENLE);
+    }
 }

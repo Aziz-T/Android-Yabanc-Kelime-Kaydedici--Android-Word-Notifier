@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Yabancı Kelime Kaydet</string>
+    <string name="Ac">Open</string>
+    <string name="Kapa">Close</string>
 </resources>

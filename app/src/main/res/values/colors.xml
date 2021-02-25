@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimary">#FF6A6A</color>
     <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#FFC107</color>
+    <color name="colorAccent">#FFAEAE</color>
     <color name="temaRengi">#FFC107</color>
-    <color name="temaRengi2">#FF76A5</color>
+    <color name="temaRengi2">#FF6A6A</color>
 
 </resources>

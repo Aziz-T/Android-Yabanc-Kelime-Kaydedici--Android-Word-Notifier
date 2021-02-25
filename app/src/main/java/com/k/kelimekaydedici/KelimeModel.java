@@ -1,26 +1,11 @@
 package com.k.kelimekaydedici;
 
 public class KelimeModel {
-    private String ata, kelime,anlami;
+   private String kelime, cevirisi;
 
-    public KelimeModel(){}
-    public KelimeModel(String kelime, String anlami) {
+    public KelimeModel(String kelime, String cevirisi) {
         this.kelime = kelime;
-        this.anlami = anlami;
-    }
-
-    public KelimeModel(String ata, String kelime, String anlami) {
-        this.ata = ata;
-        this.kelime = kelime;
-        this.anlami = anlami;
-    }
-
-    public String getAta() {
-        return ata;
-    }
-
-    public void setAta(String ata) {
-        this.ata = ata;
+        this.cevirisi = cevirisi;
     }
 
     public String getKelime() {
@@ -31,11 +16,11 @@ public class KelimeModel {
         this.kelime = kelime;
     }
 
-    public String getAnlami() {
-        return anlami;
+    public String getCevirisi() {
+        return cevirisi;
     }
 
-    public void setAnlami(String anlami) {
-        this.anlami = anlami;
+    public void setCevirisi(String cevirisi) {
+        this.cevirisi = cevirisi;
     }
 }
