@@ -6,7 +6,10 @@ Proje amacı: Öğrendiğiniz yabancı dilde not etmek istediğiniz kelimeleri k
 ister el ile kaydedebilirsiniz. Kaydettiğiniz kelimeleri sınıflandırabilirsiniz ve sınıflandırdığınız kelimelerden test olabilirsiniz.
 
 Projede Kullanılan Yöntemler: 
--Görüntü tarama için Google Vision kütüphanesi
--Kelimeleri hafıza da tutmak için JSON, GSON
+- Görüntü tarama için Google Vision kütüphanesi
+- Kelimeleri hafıza da tutmak için JSON, GSON
+
+
+
 
 
