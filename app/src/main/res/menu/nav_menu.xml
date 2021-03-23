@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/favoriler"
-        android:title="Favoriler"/>
+        android:title="Favoriler"
+        android:icon="@drawable/ic_star_black_24dp"
+        />
     <item android:id="@+id/kategoriler"
-        android:title="Kategoriler"/>
+        android:title="Kategoriler"
+        android:icon="@drawable/ic_create_new_folder_black_24dp"/>
 </menu>

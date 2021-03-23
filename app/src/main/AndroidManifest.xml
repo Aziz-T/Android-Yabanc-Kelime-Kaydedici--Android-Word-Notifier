@@ -13,8 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".KlasorActivity"></activity>
-        <activity android:name=".SelectActivity" />
+        <activity android:name=".DilActivity"></activity>
+        <activity android:name=".SkorActivity" />
+        <activity android:name=".KelimelerActivity" />
+        <activity android:name=".KlasorActivity" />
         <activity android:name=".TestActivity" />
         <activity android:name=".KelimeActivity" />
         <activity android:name=".EkleActivity" />

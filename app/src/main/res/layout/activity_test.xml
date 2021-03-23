@@ -12,13 +12,14 @@
         android:layout_height="wrap_content"
         android:text="soru"
         android:padding="7dp"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:gravity="center"
-        android:background="@drawable/kelime_item_back"
+        android:background="@drawable/soru_txt_back"
         android:textColor="#000"
         android:textSize="15dp"/>
 
    <LinearLayout
+       android:id="@+id/lineer"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:orientation="vertical"
@@ -64,7 +65,7 @@
         android:id="@+id/ileriButon"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
-        android:text="buton2"
+        android:text="İLERİ"
         android:padding="5dp"
         android:layout_margin="5dp"
         android:background="@drawable/buton_back"

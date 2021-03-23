@@ -80,7 +80,8 @@ public class MainActivity extends AppCompatActivity implements KelimeListener{
                 if(id== R.id.favoriler){
 
                 }if(id== R.id.kategoriler){
-
+                    Intent intent = new Intent(MainActivity.this,KlasorActivity.class);
+                    startActivity(intent);
                 }
                 return true;
             }
@@ -88,6 +89,12 @@ public class MainActivity extends AppCompatActivity implements KelimeListener{
 
 
     }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        return drawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
+    }
+
     @Override
     public void onBackPressed() {
 
